@@ -20,6 +20,7 @@ def start_alpha():
         time.sleep(1)
         speak("How can i help you?")
         user_command = record_audio()
+        print("user = " + user_command)
         response(user_command)
 
 

@@ -1,11 +1,11 @@
-import speech_recognition as sr
+import speech_recognition as sr # voice command -> text
 import webbrowser
 from datetime import datetime
 import yfinance as yf
 import playsound
 import os
 import random
-from gtts import gTTS
+from gtts import gTTS # google text to speech
 import time
 r = sr.Recognizer()
 
@@ -14,6 +14,7 @@ def record_audio(ask=""):
     with sr.Microphone() as source:
         if ask:
             speak(ask)
+            print("response = " + ask)
         audio = r.listen(source, phrase_time_limit=4)
         voice_data = ''
         try:
@@ -31,7 +32,7 @@ def speak(audio_string):
     audio_file = 'audio-' + str(randomNum) + '.mp3'
     tts.save(audio_file)
     playsound.playsound(audio_file)
-    print(audio_string)
+    print("response = " + audio_string)
     os.remove(audio_file)
 
 
@@ -65,10 +66,12 @@ def response(user_command):
         url = 'https://www.google.co.in/maps/dir/' + current_location + '/' + final_destination
         webbrowser.get().open(url)
         speak("Here is how you can reach " + final_destination + " from " + current_location)
-    elif 'what is the time' in user_command:
-        current_time = datetime.now().time()
-        speak("Currently the time is " + str(current_time))
-    elif 'what is the date' in user_command:
+    elif 'what is the time right now' in user_command:
+        current_time_h = datetime.now().time().hour
+        current_time_m = datetime.now().time().minute
+        current_time = str(current_time_h) + " hours and " + str(current_time_m) + " minutes"
+        speak("Currently the time is " + current_time)
+    elif 'what is the date today' in user_command:
         current_date = datetime.now().date()
         speak("Today is " + str(current_date))
     elif 'get stock details' in user_command:
@@ -151,7 +154,10 @@ def response(user_command):
         url = "https://www.dictionary.com/browse/" + word
         webbrowser.get().open(url)
         speak("Here is what " + word + " means!")
-    elif 'exit' in user_command:
+    elif 'wait alpha' in user_command:
+        speak("Going offline for 5 minutes!")
+        time.sleep(300)
+    elif 'exit alpha' in user_command:
         speak('going offline')
         exit()
     else:
